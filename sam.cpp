@@ -104,6 +104,8 @@ Type objective_function<Type>::operator() ()
   vector<Type> logCatch(catchMeanWeight.dim(0));
   vector<Type> tsb(timeSteps);
   vector<Type> logtsb(timeSteps);
+  vector<Type> logR(timeSteps);
+  vector<Type> R(timeSteps);
 
   Type ans=0; //negative log-likelihood
   
@@ -312,6 +314,12 @@ Type objective_function<Type>::operator() ()
     }
     logtsb(y)=log(tsb(y));
   }
+  for(int y=0;y<timeSteps;y++){  
+    logR(y)=logN(0,y);
+    R(y)=exp(logR(y));
+  }
+
+
   
   REPORT(predObs);
   REPORT(predSd);
@@ -323,6 +331,8 @@ Type objective_function<Type>::operator() ()
   ADREPORT(logCatch);
   ADREPORT(tsb);
   ADREPORT(logtsb);
+  ADREPORT(R);
+  ADREPORT(logR);
 
   return ans;
 }
